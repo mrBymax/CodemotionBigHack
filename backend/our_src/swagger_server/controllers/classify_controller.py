@@ -7,6 +7,9 @@ from swagger_server.models.item_classification import ItemClassification  # noqa
 from swagger_server.models.item_component import ItemComponent  # noqa: E501
 from swagger_server import util
 
+from ..libs import image
+import cv2
+
 
 def classify_image(body):  # noqa: E501
     """Classify the image
@@ -18,8 +21,23 @@ def classify_image(body):  # noqa: E501
 
     :rtype: List[ItemClassification]
     """
-    if connexion.request.is_json:
-        body = IMGFile.from_dict(connexion.request.get_json())  # noqa: E501
+    #if connexion.request.is_json:
+    #    body = IMGFile.from_dict(connexion.request.get_json())  # noqa: E501
+
+    print(body)
+
+    img = body["image_b64"]
+    img = str(img)
+
+    img = img.split(',')[1]  # Extract base64
+    img = image.string_to_image(img)  # Converts into RGB
+
+    cv2.imshow("asd", img)
+    cv2.waitKey(0)
+
+    #img = cv2.resize(img, (28, 28))  # Resize the image for the neural network
+    #img = 255 - img  # Black = white and vice versa
+
     return [
   {
     "found": True,

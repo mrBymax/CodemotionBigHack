@@ -1,0 +1,5 @@
+connexion == 2.6.0
+Pillow
+flask_cors
+matplotlib
+Tkinter

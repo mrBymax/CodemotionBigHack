@@ -20,14 +20,7 @@ def classify_image(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = IMGFile.from_dict(connexion.request.get_json())  # noqa: E501
-    return [
-  {
-    "found": True,
-    "class": "Mouse",
-    "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
-    "score": 0.96
-  }
-]
+    return 'do some magic!'
 
 
 def classify_text(body):  # noqa: E501
@@ -42,22 +35,7 @@ def classify_text(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = [ConversationObject.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
-    return [
-  {
-    "question": "Does ST produce mices?",
-    "answer": {
-      "response": "Yes, we produce mices",
-      "items": [
-        {
-          "found": True,
-          "class": "Mouse",
-          "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
-          "score": 0.96
-        }
-      ]
-    }
-  }
-]
+    return 'do some magic!'
 
 
 def get_info(itemName):  # noqa: E501
@@ -70,9 +48,4 @@ def get_info(itemName):  # noqa: E501
 
     :rtype: List[ItemComponent]
     """
-    return [
-  {
-    "componentName": "BALF-NRG-02D3",
-    "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-  }
-]
+    return 'do some magic!'

@@ -49,9 +49,6 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ItemClassification"
-      security:
-      - petstore_auth:
-        - "read:pets"
       x-swagger-router-controller: "swagger_server.controllers.classify_controller"
   /classify/classifyText:
     post:
@@ -80,9 +77,6 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ItemClassification"
-      security:
-      - petstore_auth:
-        - "read:pets"
       x-swagger-router-controller: "swagger_server.controllers.classify_controller"
   /classify/getInfo/{itemName}:
     get:

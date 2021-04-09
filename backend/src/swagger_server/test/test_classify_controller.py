@@ -22,7 +22,7 @@ class TestClassifyController(BaseTestCase):
         """
         body = IMGFile()
         response = self.client.open(
-            '/v2/classify/classifyImage',
+            '/v1/classify/classifyImage',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -36,7 +36,7 @@ class TestClassifyController(BaseTestCase):
         """
         body = [ConversationObject()]
         response = self.client.open(
-            '/v2/classify/classifyText',
+            '/v1/classify/classifyText',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -49,7 +49,7 @@ class TestClassifyController(BaseTestCase):
         Get info about the object
         """
         response = self.client.open(
-            '/v2/classify/getInfo/{itemName}'.format(itemName='itemName_example'),
+            '/v1/classify/getInfo/{itemName}'.format(itemName='itemName_example'),
             method='GET',
             content_type='application/json')
         self.assert200(response,
