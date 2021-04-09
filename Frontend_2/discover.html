@@ -33,13 +33,13 @@
         </div>
 
         <div>
-            <form class="text-center">
+            <div class="text-center">
                 <div class="form-group">
                     <label for="uploadImage">Scegli un'immagine da analizzare:</label>
                     <input type="file" class="form-control-file" id="uploadImage" name="uploadImage" accept="image/png, image/jpeg">
                 </div>
                 <button onclick="analizzaImmagine();" class="btn btn-primary mb-2">Analizza immagine</button>
-            </form>
+            </div>
         </div>
 
     </div>
@@ -49,12 +49,42 @@
 
 
     <script>
+
+
+        function showDataForDevice(item){
+            let name = item.class,
+                imgUrl = item.imgEndpoint,
+                score = item.score;
+        }
+
         function analizzaImmagine() {
             function getBase64(file) {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function() {
-                    console.log(reader.result);
+                    fetch("http://localhost:8083/v1/classify/classifyImage", {
+                        method: "POST",
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            image_b64: reader.result
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        let text="Seleziona:\n";
+                        for(let i in data){
+                            let item = data[i],
+                                name = item.class,
+                                imgUrl = item.imgEndpoint,
+                                score = item.score;
+                            text += `${i}: ${name} - ${score}\n`
+                        }
+                        let chosen = prompt(text, "0");
+                        showDataForDevice(data[chosen]);
+                    })
                 };
                 reader.onerror = function(error) {
                     console.log('Error: ', error);
