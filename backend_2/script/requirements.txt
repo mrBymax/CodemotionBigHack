@@ -1,5 +1,7 @@
-connexion == 2.6.0
+connexion
 Pillow
 flask_cors
 matplotlib
-Tkinter
+tk
+tensorflow
+numpy
