@@ -19,12 +19,11 @@ import pandas as pd
 
 
 def get_component(name):
-
     data = pd.read_csv('Sheet0-Table1.csv',
-                    error_bad_lines=False, sep=';', header=0)
+                       error_bad_lines=False, sep=';', header=0)
 
     df = pd.DataFrame(data, columns=[
-                    'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
+        'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
 
     df.set_index('LEVEL_NO')
 
@@ -35,14 +34,10 @@ def get_component(name):
     ret = []
 
     for item in new_list:
-        if name in item[0]:
+        if name in item[0].lower():
             ret.append({
                 "name": item[2],
                 "description": item[3]
             })
 
-    print(len(ret))
-
-    
-
-
+    return ret

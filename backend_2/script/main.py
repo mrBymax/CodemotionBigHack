@@ -107,6 +107,53 @@ def getInfo(path):
     return resp
 
 
+@app.route("/v1/teaching/getAllDevices", methods=['GET'])
+def getAllDevices():
+    # funzione Federico
+
+    ret = [
+        {
+            "name": "diocane"
+        },
+    ]
+
+    resp = Response(response=json.dumps(ret),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+
+@app.route("/v1/teaching/setDevice/<path:path>", methods=['GET'])
+def setComponent(path):
+    # path: nome del componente con maiuscole/minuscole tutte uguali ad xls
+    # shuffle list python
+
+    ret = [
+        {
+            "name": "diocane"
+        },
+    ]
+
+    resp = Response(response=json.dumps(ret),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+
+@app.route("/v1/teaching/getTest", methods=['GET'])
+def getTest(path):
+    # funzione Federico
+
+    ret = {
+        "detail": "tutte le componenti shuffled"
+    }
+
+    resp = Response(response=json.dumps(ret),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
