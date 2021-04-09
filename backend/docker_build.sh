@@ -1,1 +1,1 @@
-docker build -t vs_backend2:dev .
+docker build -t cm_backend:dev .
