@@ -28,16 +28,77 @@ def predict():
     time.sleep(10)
     print("AS")
 
-    ret = "ciao"
-    resp = Response(response=ret,
+    ret = [
+        {
+            "found": True,
+            "class": "Mouse",
+            "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
+            "score": 0.96
+        },
+        {
+            "found": True,
+            "class": "Mouse",
+            "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
+            "score": 0.95
+        }
+    ]
+    resp = Response(response=json.dumps(ret),
                     status=200,
                     mimetype="application/json")
     return resp
 
 
-@app.route('/<path:path>')
+@app.route('/v1/classify/classifyText')
 def retFile(path):
-    return send_from_directory('static', path)
+    ret = [
+        {
+            "found": True,
+            "class": "Mouse",
+            "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
+            "score": 0.96
+        },
+        {
+            "found": True,
+            "class": "Mouse",
+            "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group0/2e/a5/77/2f/ba/2c/41/ea/mobile_pos_image/files/mobile_pos.jpg/_jcr_content/translations/en.mobile_pos.jpg",
+            "score": 0.95
+        }
+    ]
+    resp = Response(response=json.dumps(ret),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+
+@app.route("/v1/classify/getInfo/<path:path>")
+def getInfo(path):
+    print(path)
+    ret =[
+        {
+            "componentName": "BALF-NRG-02D3",
+            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
+        },
+        {
+            "componentName": "BALF-d-02D3",
+            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
+        },
+        {
+            "componentName": "BALF-NRG-444",
+            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
+        },
+        {
+            "componentName": "BALF-5523456-02D3",
+            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
+        },
+        {
+            "componentName": "BALF-234567-02D3",
+            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
+        }
+    ]
+    resp = Response(response=json.dumps(ret),
+                    status=200,
+                    mimetype="application/json")
+    return resp
 
 
 @app.route('/')
