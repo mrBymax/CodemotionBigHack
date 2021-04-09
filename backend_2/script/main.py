@@ -43,6 +43,7 @@ def predict():
 
     if len(res) > 0:
         for pred in res:
+            url = "none"
             for device in devices:
                 if device["name"] == pred[1]:
                     url = device["url"]
