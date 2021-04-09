@@ -1,0 +1,1 @@
+docker build -t vs_backend2:dev .
