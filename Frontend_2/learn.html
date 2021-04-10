@@ -32,6 +32,13 @@
             <h4>Here you can learn to remember what components <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a> use in the objects</h4>
         </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Test</h1>
+                <div id="testInfo"></div>
+            </div>
+
+        </div>
 
     </div>
 
@@ -43,7 +50,48 @@
     <script src="assets/bootstrap/bootstrap.bundle.js"></script>
 
     <script>
-        
+        function submitTest(e){
+            let answers = [];
+            $(document).ready(() => {
+                $(document).find(".form-check").each(() => {
+                    console.log(this)
+                })
+            })
+        }
+
+        $(document).ready(() => {
+            fetch(`http://localhost:8083/v1/teaching/getTest`, {
+                method: "GET",
+                mode: 'cors'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.components.length > 0){
+                    let html = `<div>
+                        <h2>Which are the ST components on a "${data.device}"?</h2>
+                    `;
+
+                    
+                    for(let i in data.components){
+                        let component = data.components[i];
+                        html += `<div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check${i}">
+                                    <label class="form-check-label" for="check${i}">
+                                        ${component.name} (${component.description})
+                                    </label>
+                                </div>`
+                    }
+                    
+                    html += `<button type="button" class="btn btn-success" onclick="submitTest(event)">Submit this test</button>`;
+
+                    html += "</div>"
+
+                    $("#testInfo").html(html);
+                } else {
+                    $("#testInfo").text("No test available right now")
+                }
+            });
+        })
     </script>
 
 

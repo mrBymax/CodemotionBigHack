@@ -106,19 +106,32 @@ def getAllDevices():
     return resp
 
 
-TEST_OPTIONS = []
-CORRECT = []
-WRONG = []
+TEST_OPTIONS = {
+    "device": "",
+    "components": [],
+    "block_diagram": []
+}
+CORRECT = {
+    "components": [],
+    "block_diagram": []
+}
+WRONG = {
+    "components": [],
+    "block_diagram": []
+}
 
 
 @app.route("/v1/teaching/setDevice/<device>", methods=['GET'])
 def setComponent(device):
     global TEST_OPTIONS, CORRECT, WRONG
-    CORRECT = databaseHandler.get_component(device)
-    WRONG = databaseHandler.get_random_components(len(CORRECT), CORRECT)
+    CORRECT["components"] = databaseHandler.get_component(device)
+    WRONG["components"] = databaseHandler.get_random_components(len(CORRECT["components"]), CORRECT["components"])
 
-    TEST_OPTIONS = CORRECT + WRONG
-    random.shuffle(TEST_OPTIONS)
+    TEST_OPTIONS["components"] = CORRECT + WRONG
+    random.shuffle(TEST_OPTIONS["components"])
+    TEST_OPTIONS["device"] = device
+
+    # Todo: add block_diagram
 
     ret = {
         "detail": "Device set",
@@ -133,7 +146,14 @@ def setComponent(device):
 
 
 @app.route("/v1/teaching/getTest", methods=['GET'])
-def getTest(path):
+def getTest():
+    resp = Response(response=json.dumps(TEST_OPTIONS),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+@app.route("/v1/teaching/getBlockDiagram", methods=['GET'])
+def getTest():
     resp = Response(response=json.dumps(TEST_OPTIONS),
                     status=200,
                     mimetype="application/json")
