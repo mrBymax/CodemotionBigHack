@@ -57,7 +57,7 @@
 
     <script>
         function getAccordion(raw_data, j){
-            let data = raw_data.data;
+            let data = raw_data.answers;
             
 
             let html = `<a class="btn btn-primary" data-toggle="collapse"
@@ -67,16 +67,17 @@
     Expand
   </a>`
 
-                html += `<div class="collapse" id="collapse${j}">
-  <div class="card card-body">`     
-                    html += "<ul>"
-                    html += `<li>Block diagram: ${data.block_diagram}`;
-                for(let i in data){
-                    let item = data[i];
-                    html += `<li>${item.component} | Given: ${item.checked}. Correct: </li>`
-                }
-                    html += "</ul>"
-                html += `</div>
+            html += `<div class="collapse" id="collapse${j}">
+<div class="card card-body">`     
+            html += "<ul>"
+            console.log(raw_data)
+            html += `<li>Block diagram: ${raw_data.block_diagram.correct ? "Correct" : "Wrong"}`;
+            for(let i in data){
+                let item = data[i];
+                html += `<li>${item.component} | Given: ${item.checked}. Correct was: ${item.expected} </li>`
+            }
+                html += "</ul>"
+            html += `</div>
 </div>`
         return html
         }
@@ -92,7 +93,8 @@
                 html = "";
                 for(let j in data){
                     let object = data[j];
-                    html += `<li><h5>${object.data.name} (${object.data.device}) - ${object.score}</h5>`;
+                    console.log(object)
+                    html += `<li><h5>${object.data.name} (${object.data.device}) - Correct: ${object.score.correct}, Wrong: ${object.score.wrong}</h5>`;
                     html += getAccordion(object.data, j);
                     html += `</li>`;
                 }
