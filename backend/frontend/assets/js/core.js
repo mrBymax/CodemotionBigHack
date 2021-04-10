@@ -1,5 +1,5 @@
 function loadComponentsInside(name, where){
-    fetch(`/v1/classify/getInfo/${name}`, {
+    fetch(`http://localhost:8083/v1/classify/getInfo/${name}`, {
                     method: "GET",
                     mode: 'cors'
                 })
@@ -44,8 +44,8 @@ function showDataForDevice(item, where) {
     let name = item.class,
         imgUrl = item.imgEndpoint;
 
-    let html =  `<h1>${name.toUpperCase()}</h1>` +
-                `<img src="${imgUrl}" alt="No block diagram available" />` +
+    let html =  `<h1 class="marginTop">${name.toUpperCase()}</h1>` +
+                `<div class="alignCenter"><img src="${imgUrl}" alt="No block diagram available" /></div>` +
                 `<br />`+
                 `<h1>ST components inside:</h1>` +
                 `<div id="componentList">Loading...</div>`;

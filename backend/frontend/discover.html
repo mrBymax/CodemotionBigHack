@@ -35,29 +35,41 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h2>Does <b class="stColor">ST</b> manufacture anything for this object (photo)?</h2>
-                <div class="form-group">
-                    <label for="uploadImage">Choose an image:</label>
-                    <input type="file" 
-                    class="form-control-file" 
-                    id="uploadImage" accept="image/png, image/jpeg">
+            
+                         
+            <div class="container content">
+                <h2 class="stColor text-center">Does <b class="stColor">ST</b> manufacture anything for this object (photo)?</h2>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">Choose an image</div>
+                            <div class="card-body height3">
+                                <div class="form-group">
+                                    
+                                    <input type="file" 
+                                    class="form-control-file" 
+                                    id="uploadImage" accept="image/png, image/jpeg">
+                                </div>
+                
+                                <button onclick="analyzeImage();" class="btn btn-primary mb-2 customButton">START THE ANALYSIS</button>
+                            </div>
+                    </div>
                 </div>
 
-                <button onclick="analyzeImage();" class="btn btn-primary mb-2 customButton">START THE ANALYSIS</button>
-            </div>
-
-            <!-- QUA VA LA RISPOSTA CHE ARRIVA DAL SERVER -->
-            <div id="serverResponse" >
-
+                <div id="serverResponse" class="col-12 serverResponse"></div>
             </div>
         </div>
+        </div>
+
+    </div>
 
         <!-- QUA VA IL CHATBOT -->
         <div class="row">
             <div class="col-md-12">
-            <h2 class="stColor">Assi<b>ST</b>ant</h2>
+            
                          
             <div class="container content">
+                <h2 class="stColor text-center">Assi<b>ST</b>ant</h2>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -80,7 +92,8 @@
                                 <span class="input-group-btn">
                                 <button 
                                 class="btn btn-primary btn-sm" 
-                                id="btn-chat"
+                                id="btn-chat" 
+                                style="height:calc(1.5em + 0.75rem + 5px);"
                                 >Send</button>
                                 </span>
                             </div>
@@ -88,14 +101,13 @@
                     </div>
                 </div>
 
-                <div id="serverResponseChat">
-
-                </div>
+                <div id="serverResponseChat" class="col-12 serverResponse"></div>
             </div>
         </div>
         </div>
 
     </div>
+</div>
 
     <footer class="container text-center">
         <p>&copy; 2021 <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a></p>
@@ -112,7 +124,7 @@
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function() {
-                    fetch("/v1/classify/classifyImage", {
+                    fetch("http://localhost:8083/v1/classify/classifyImage", {
                             method: "POST",
                             mode: 'cors',
                             headers: {
@@ -190,7 +202,7 @@
         addToChat("out", queryText);
 
 
-        fetch("/v1/classify/classifyText", {
+        fetch("http://localhost:8083/v1/classify/classifyText", {
             method: "POST",
             mode: 'cors',
             headers: {
@@ -208,7 +220,7 @@
                 let component = data[i];
                 console.log(component)
                 html += `<a class='pointer' onclick="showDataForDeviceChat('${component.class}', '${component.imgEndpoint}', '#serverResponseChat')">`;
-                html += `<li>${component.class}</li>`;
+                html += `<li>&middot; ${component.class}</li>`;
                 html += "</a>";
             }
             html += "</ul>"

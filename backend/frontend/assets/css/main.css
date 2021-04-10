@@ -52,3 +52,26 @@ border-bottom: 1px solid rgba(0,0,0,.125);
 .pointer {
     cursor: pointer;
 }
+
+.importaImmagine {
+    background: white;
+    border: 1px solid #17202b ;
+    margin-bottom: 30px;
+}
+
+.btn-primary {
+    background: #03234b !important;
+    border: #03234b;
+}
+
+.customButton {
+    float: right;
+}
+
+.serverResponse .alignCenter {
+    text-align: center
+}
+
+.marginTop {
+    margin: 30px 0 0 0;
+}

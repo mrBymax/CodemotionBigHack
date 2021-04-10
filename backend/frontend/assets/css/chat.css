@@ -7,7 +7,7 @@
 .chat-list li {
     margin-bottom: 10px;
     overflow: auto;
-    color: #ffffff;
+    color: #17202b;
 }
 
 .chat-list .chat-img {
@@ -26,7 +26,8 @@
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     border-radius: 50px;
-    background: #5a99ee;
+    background: #e9e8eb;
+    color: #17202b;
     display: inline-block;
     padding: 10px 20px;
     position: relative;
@@ -62,7 +63,7 @@
 .chat-list .in .chat-message:before {
     left: -12px;
     border-bottom: 20px solid transparent;
-    border-right: 20px solid #5a99ee;
+    border-right: 20px solid #e9e8eb;
 }
 
 .chat-list .out .chat-img {
@@ -76,13 +77,17 @@
 }
 
 .chat-list .out .chat-message {
-    background: #fc6d4c;
+    background: #0781f8;
 }
 
+.out p{
+    color: white !important;
+}
 .chat-list .out .chat-message:before {
     right: -12px;
     border-bottom: 20px solid transparent;
-    border-left: 20px solid #fc6d4c;
+    border-left: 20px solid #0781f8;
+    color: black;
 }
 
 .card .card-header:first-child {

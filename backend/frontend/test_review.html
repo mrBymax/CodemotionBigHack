@@ -84,7 +84,7 @@
 
 
         function update() {
-            fetch(`/v1/teaching/getSubmittedTests`, {
+            fetch(`http://localhost:8083/v1/teaching/getSubmittedTests`, {
                 method: "GET",
                 mode: 'cors'
             })
@@ -107,7 +107,7 @@
         })
 
         function submitComponent(name){
-            fetch(`/v1/teaching/setDevice/${name}`, {
+            fetch(`http://localhost:8083/v1/teaching/setDevice/${name}`, {
                 method: "GET",
                 mode: 'cors'
             })
