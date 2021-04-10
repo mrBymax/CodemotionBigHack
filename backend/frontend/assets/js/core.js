@@ -44,10 +44,10 @@ function showDataForDevice(item, where) {
     let name = item.class,
         imgUrl = item.imgEndpoint;
 
-    let html =  `<h1 class="marginTop">${name.toUpperCase()}</h1>` +
+    let html =  `<h2 class="marginTop">${name.toUpperCase()}</h2>` +
                 `<div class="alignCenter"><img src="${imgUrl}" alt="No block diagram available" /></div>` +
                 `<br />`+
-                `<h1>ST components inside:</h1>` +
+                `<h2>ST components inside:</h2>` +
                 `<div id="componentList">Loading...</div>`;
     
     $(where).html(html);
