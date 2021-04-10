@@ -1,0 +1,143 @@
+[
+    {
+        "data": {
+            "device": "ABS",
+            "answers": [
+                {
+                    "component": "SPC58NE84E7",
+                    "checked": false
+                },
+                {
+                    "component": "STSW-ST25SDK001",
+                    "checked": false
+                },
+                {
+                    "component": "L9663",
+                    "checked": false
+                },
+                {
+                    "component": "ESDCAN05-2BWY",
+                    "checked": false
+                },
+                {
+                    "component": "ST-MCU-FINDER",
+                    "checked": false
+                },
+                {
+                    "component": "SPC574K72E5",
+                    "checked": false
+                },
+                {
+                    "component": "SM4TY",
+                    "checked": false
+                },
+                {
+                    "component": "L9396",
+                    "checked": false
+                },
+                {
+                    "component": "SM30TY",
+                    "checked": false
+                },
+                {
+                    "component": "STM32WB5MMG",
+                    "checked": false
+                },
+                {
+                    "component": "STEVAL-ISA055V1",
+                    "checked": false
+                },
+                {
+                    "component": "FERD20H100S",
+                    "checked": false
+                },
+                {
+                    "component": "ESDCAN03-2BWY",
+                    "checked": false
+                },
+                {
+                    "component": "VN7003AH",
+                    "checked": false
+                },
+                {
+                    "component": "STLQ020",
+                    "checked": false
+                },
+                {
+                    "component": "NUCLEO-F746ZG",
+                    "checked": false
+                },
+                {
+                    "component": "STM32H755ZI",
+                    "checked": false
+                },
+                {
+                    "component": "VN5R003H-E",
+                    "checked": false
+                },
+                {
+                    "component": "SPSGRF",
+                    "checked": true
+                },
+                {
+                    "component": "STSPIN830",
+                    "checked": false
+                },
+                {
+                    "component": "STL50N6F7",
+                    "checked": false
+                },
+                {
+                    "component": "L6599AT",
+                    "checked": false
+                },
+                {
+                    "component": "LinuxDriverIIO",
+                    "checked": false
+                },
+                {
+                    "component": "L9616",
+                    "checked": false
+                },
+                {
+                    "component": "STEVAL-ISA191V1",
+                    "checked": false
+                },
+                {
+                    "component": "ST-DIODE-FINDER",
+                    "checked": false
+                },
+                {
+                    "component": "L9301",
+                    "checked": false
+                },
+                {
+                    "component": "SM15TY",
+                    "checked": false
+                },
+                {
+                    "component": "SEL-SPC5",
+                    "checked": true
+                },
+                {
+                    "component": "PROTECT-FINDER",
+                    "checked": false
+                },
+                {
+                    "component": "EVLCMB1-AIO210W",
+                    "checked": false
+                },
+                {
+                    "component": "ESDCAN01-2BLY",
+                    "checked": false
+                },
+                {
+                    "component": "ESDA25P35-1U1M",
+                    "checked": false
+                }
+            ],
+            "name": "asdf"
+        },
+        "score": 0.9
+    }
+]
