@@ -89,7 +89,7 @@
         }
 
         function submitRequest(data){
-            fetch("http://localhost:8083/v1/teaching/submitTest", {
+            fetch("/v1/teaching/submitTest", {
                 method: "POST",
                 mode: 'cors',
                 headers: {
@@ -129,7 +129,7 @@
         }
 
         $(document).ready(() => {
-            fetch(`http://localhost:8083/v1/teaching/getTest`, {
+            fetch(`/v1/teaching/getTest`, {
                 method: "GET",
                 mode: 'cors'
             })

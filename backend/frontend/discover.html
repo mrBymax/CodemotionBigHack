@@ -112,7 +112,7 @@
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function() {
-                    fetch("http://localhost:8083/v1/classify/classifyImage", {
+                    fetch("/v1/classify/classifyImage", {
                             method: "POST",
                             mode: 'cors',
                             headers: {
@@ -190,7 +190,7 @@
         addToChat("out", queryText);
 
 
-        fetch("http://localhost:8083/v1/classify/classifyText", {
+        fetch("/v1/classify/classifyText", {
             method: "POST",
             mode: 'cors',
             headers: {

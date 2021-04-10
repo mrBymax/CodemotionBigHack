@@ -1,5 +1,5 @@
 function loadComponentsInside(name, where){
-    fetch(`http://localhost:8083/v1/classify/getInfo/${name}`, {
+    fetch(`/v1/classify/getInfo/${name}`, {
                     method: "GET",
                     mode: 'cors'
                 })

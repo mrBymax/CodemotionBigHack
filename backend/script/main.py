@@ -1,19 +1,14 @@
 import random
 
+import os
 from flask import Flask, request, send_from_directory, Response
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
-import cv2
-import numpy as np
 import json
 
 from utils import image
 from database import databaseHandler
-# import matplotlib
-# import matplotlib.pyplot as plt
 
-# matplotlib.use('TkAgg')
-import time
 from neuralNet import predict as nnPredict
 from database import databaseHandler
 
@@ -242,12 +237,23 @@ def submitTest():
     return resp
 
 
-@app.route('/')
-def root():
-    resp = Response(response=json.dumps([]),
-                    status=200,
-                    mimetype="application/json")
-    return resp
+@app.route('/', defaults=dict(filename=None))
+@app.route('/<path:filename>', methods=['GET'])
+def index(filename):
+    filename = filename or 'index.html'
+    return send_from_directory('/frontend', filename)
+
+
+@app.route('/<path:dir1>/<path:filename>', methods=['GET'])
+def index2(dir1, filename):
+    filename = filename or 'index.html'
+    return send_from_directory(os.path.join('/frontend', dir1), filename)
+
+
+@app.route('/<path:dir1>/<path:dir2>/<path:filename>', methods=['GET'])
+def index3(dir1, dir2, filename):
+    filename = filename or 'index.html'
+    return send_from_directory(os.path.join('/frontend', dir1, dir2), filename)
 
 
 if __name__ == '__main__':

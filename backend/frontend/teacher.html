@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>ST-udent Learn - teacher</title>
+    <title>ST-udent Teacher</title>
 
     <meta content="" name="description">
 
@@ -27,23 +27,29 @@
     <div class="container">
 
         <div class="py-5 text-center">
-            <img class="d-block mx-auto mb-4" src="assets/img/logo.png" width="150" height="150">
-            <h1 class="stColor">Teacher - tests review</h1>
+            <a href="index.html"><img class="d-block mx-auto mb-4" src="assets/img/logo.png" width="150" height="150" ></a>
+            <h1 class="stColor">Teacher</h1>
             <h4>Here you can learn to remember what components <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a> use in the objects</h4>
         </div>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
                 <div>
-                    <h1>Submitted tests:</h1>
-                    <button type="button" class="btn btn-success" onclick="update()">Refresh</button>
-
+                    <h1>Select the device:</h1>
                     <ul id="deviceList">
 
                     </ul>
 
                 </div>
             </div>
+
+            <div class="col-md-6">
+                <h1>ST components inside</h1>
+                <div id="serverResponse">
+                    <div id="componentList"></div>
+                </div> 
+            </div>
+
         </div>
     </div>
 
@@ -56,58 +62,23 @@
     <script src="assets/js/core.js"></script>
 
     <script>
-        function getAccordion(raw_data, j){
-            let data = raw_data.answers;
-            
-
-            let html = `<a class="btn btn-primary" data-toggle="collapse"
-                 href="#collapse${j}" role="button"
-                  aria-expanded="false" 
-                aria-controls="collapse${j}">
-    Expand
-  </a>`
-
-            html += `<div class="collapse" id="collapse${j}">
-<div class="card card-body">`     
-            html += "<ul>"
-            console.log(raw_data)
-            html += `<li>Block diagram: ${raw_data.block_diagram.correct ? "Correct" : "Wrong"}`;
-            for(let i in data){
-                let item = data[i];
-                html += `<li>${item.component} | Given: ${item.checked}. Correct was: ${item.expected} </li>`
-            }
-                html += "</ul>"
-            html += `</div>
-</div>`
-        return html
-        }
-
-
-        function update() {
-            fetch(`http://localhost:8083/v1/teaching/getSubmittedTests`, {
+        $(document).ready(() => {
+            fetch(`/v1/teaching/getAllDevices`, {
                 method: "GET",
                 mode: 'cors'
             })
             .then(response => response.json())
             .then(data => {
                 html = "";
-                for(let j in data){
-                    let object = data[j];
-                    console.log(object)
-                    html += `<li><h5>${object.data.name} (${object.data.device}) - Correct: ${object.score.correct}, Wrong: ${object.score.wrong}</h5>`;
-                    html += getAccordion(object.data, j);
-                    html += `</li>`;
+                for(let object of data){
+                    html += `<li class="pointer" onclick="selectDevice(event)">${object}</li>`;
                 }
                 $("#deviceList").html(html)
             });
-        }
-
-        $(document).ready(() => {
-            update();
         })
 
         function submitComponent(name){
-            fetch(`http://localhost:8083/v1/teaching/setDevice/${name}`, {
+            fetch(`/v1/teaching/setDevice/${name}`, {
                 method: "GET",
                 mode: 'cors'
             })
@@ -121,7 +92,7 @@
         function selectDevice(e){
             let deviceName = $(e.srcElement).text();
             let html = `<div id="componentList"></div>`;
-            html = `<button type="button" class="btn btn-success" onclick="submitComponent('${deviceName}')">Submit this comopnent</button>`+
+            html = `<button type="button" class="btn btn-danger" onclick="submitComponent('${deviceName}')">Submit this device</button>`+
                 html;
             $("#serverResponse").html(html);
             loadComponentsInside(deviceName, "#serverResponse")
