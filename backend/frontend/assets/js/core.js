@@ -30,10 +30,10 @@ ${component.description}
 </div>
 </div>
                         `
+                        console.log(component)
                     }
                     html += "</div>"; 
 
-                    console.log(where+" #componentList")
 
                     $(where+" #componentList").html(html);
     });

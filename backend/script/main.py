@@ -81,7 +81,18 @@ def retFile():
 
 @app.route("/v1/classify/getInfo/<device>", methods=['GET'])
 def getInfo(device):
-    ret = databaseHandler.get_component(device)
+    global devices
+    block_diagram_url = ""
+    for _device in devices:
+        if _device["class"].lower() in device.lower():
+            block_diagram_url = _device["imgEndpoint"]
+            break
+
+    ret = [{
+        "name": "Block diagram",
+        "description": '<img src="'+block_diagram_url+'" width="500px" />'
+    }]
+    ret += databaseHandler.get_component(device)
 
     resp = Response(response=json.dumps(ret),
                     status=200,
