@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>ST-udent Learn</title>
+
+    <meta content="" name="description">
+
+    <meta content="" name="keywords">
+
+    <!-- FAVICONS -->
+
+    <!-- CSS THIRD PART -->
+    <link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MAIN CSS -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="py-5 text-center">
+            <a href="index.html"><img class="d-block mx-auto mb-4" src="assets/img/logo.png" width="150" height="150" ></a>
+            <h1 class="stColor">Learn</h1>
+            <h4>Here you can learn to remember what components <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a> use in objects</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <button onclick="goToTest()"class="btn btn-primary mb-2 customButton">Try a Quiz</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <h2>Select the device:</h2>
+                    <ul id="deviceList">
+
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2>ST components inside</h2>
+                <div id="serverResponse">
+                    <div id="componentList"></div>
+                </div> 
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="container text-center">
+        <p>&copy; 2021 <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a></p>
+    </footer>
+
+    <script src="assets/jquery-3.6.0.min.js"></script>
+    <script src="assets/bootstrap/bootstrap.bundle.js"></script>
+    <script src="assets/js/core.js"></script>
+
+    <script>
+        $(document).ready(() => {
+            fetch(`http://localhost:8083/v1/teaching/getAllDevices`, {
+                method: "GET",
+                mode: 'cors'
+            })
+            .then(response => response.json())
+            .then(data => {
+                html = "";
+                for(let object of data){
+                    html += `<li class="pointer" onclick="selectDevice(event)">${object}</li>`;
+                }
+                $("#deviceList").html(html)
+            });
+        })
+
+        
+
+        function selectDevice(e){
+            let deviceName = $(e.srcElement).text();
+            let html = `<div id="componentList"></div>`;
+            
+            $("#serverResponse").html(html);
+            loadComponentsInside(deviceName, "#serverResponse")
+        }
+
+        function goToTest(){
+            window.location.href="test.html";
+        }
+
+    </script>
+</body>
+
+</html>

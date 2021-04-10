@@ -46,6 +46,7 @@ function showDataForDevice(item, where) {
 
     let html =  `<h1>${name.toUpperCase()}</h1>` +
                 `<img src="${imgUrl}" alt="No block diagram available" />` +
+                `<br />`+
                 `<h1>ST components inside:</h1>` +
                 `<div id="componentList">Loading...</div>`;
     
