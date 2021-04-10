@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h1>Test</h1>
+                <h1>Test <span id="results"></span></h1>
                 <div id="testInfo"></div>
             </div>
 
@@ -102,7 +102,29 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                alert(data.detail)
+                $("#results").text(`- Correct: ${data.data.score.correct} Wrong: ${data.data.score.wrong}; Block diagram ${data.data.data.block_diagram.correct ? "Correct": "Wrong"}`)
+                
+                for(let el of $(".form-check")){
+                    if($(el).find("input.checkbox").length == 0){
+                        let img = $(el).find("img").attr("src");
+                        if(data.data.data.block_diagram.correct_url == img){
+                            $(el).css({backgroundColor: "#4caf50"})
+                        } else {
+                            $(el).css({backgroundColor: "#c62828"})
+                        }
+                    } else {
+                        let text = $(el).find("label").text().split(" (")[0];
+
+                        for(let answer of data.data.data.answers){
+                            if(answer.component != text) continue;
+                            if(answer.checked == answer.expected){
+                                $(el).css({backgroundColor: "#4caf50"})
+                            } else {
+                                $(el).css({backgroundColor: "#c62828"})
+                            }
+                        }
+                    }
+                }
             });
         }
 

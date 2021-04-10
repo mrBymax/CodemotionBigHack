@@ -222,6 +222,8 @@ def submitTest():
     if test_data["data"]["block_diagram"]["url"] in CORRECT["block_diagram"]:
         test_data["data"]["block_diagram"]["correct"] = True
 
+    test_data["data"]["block_diagram"]["correct_url"] = CORRECT["block_diagram"]
+
     test_data["score"] = {
         "correct": correct,
         "wrong": wrong
