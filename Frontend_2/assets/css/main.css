@@ -1,11 +1,40 @@
-h1, h2, h3, h4,  p {
+h1,
+h2,
+h3,
+h4,
+p {
     color: #414141;
 }
 
-.mainTitle {
-    color: #03234b;
+.titleDescription {
+    color: #F97068;
 }
 
-.titleDescription {
-    color: #cda434;
+
+.container {
+    padding-bottom: 30px;
+}
+
+.linea {
+    border-bottom: 1px solid #03234b;
+    padding: 20px;
+}
+
+.stColor {
+    color: #03234b;
+    text-decoration: none;
+}
+
+.subtitles {
+    color: #23CE6B;
+}
+
+.customHyperref {
+    text-decoration: none;
+    color: #414141;
+}
+
+.customHyperref:hover {
+    color: inherit;
+    text-decoration: none;
 }

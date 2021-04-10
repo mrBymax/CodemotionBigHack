@@ -1,3 +1,4 @@
+
 from flask import Flask, request, send_from_directory, Response
 from flask_cors import CORS, cross_origin
 
@@ -6,6 +7,7 @@ import numpy as np
 import json
 
 from utils import image
+from database import databaseHandler
 #import matplotlib
 #import matplotlib.pyplot as plt
 
@@ -110,12 +112,12 @@ def getInfo(path):
 @app.route("/v1/teaching/getAllDevices", methods=['GET'])
 def getAllDevices():
     # funzione Federico
-
-    ret = [
-        {
-            "name": "diocane"
-        },
-    ]
+    ret = get_all_devices()
+    # ret = [
+    #     {
+    #         "name": "test"
+    #     },
+    # ]
 
     resp = Response(response=json.dumps(ret),
                     status=200,
@@ -128,11 +130,12 @@ def setComponent(path):
     # path: nome del componente con maiuscole/minuscole tutte uguali ad xls
     # shuffle list python
 
-    ret = [
-        {
-            "name": "diocane"
-        },
-    ]
+    ret = get_component(path)
+    # ret = [
+    #     {
+    #         "name": "diocane"
+    #     },
+    # ]
 
     resp = Response(response=json.dumps(ret),
                     status=200,
@@ -143,7 +146,7 @@ def setComponent(path):
 @app.route("/v1/teaching/getTest", methods=['GET'])
 def getTest(path):
     # funzione Federico
-
+    
     ret = {
         "detail": "tutte le componenti shuffled"
     }
