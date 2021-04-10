@@ -238,10 +238,11 @@ def submitTest():
 
 
 @app.route('/', defaults=dict(filename=None))
-@app.route('/<path:filename>', methods=['GET'])
+@app.route('/<filename>', methods=['GET'])
 def index(filename):
+    print(filename)
     filename = filename or 'index.html'
-    return send_from_directory('/frontend', filename)
+    return send_from_directory('/frontend/', filename)
 
 
 @app.route('/<path:dir1>/<path:filename>', methods=['GET'])

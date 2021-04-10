@@ -45,6 +45,14 @@
             <div class="col-6">
                 <div>
                     <h2>Select the device:</h2>
+                    <div class="input-group">
+                        <input id="chatMessageText" 
+                        type="text" 
+                        onkeyup="filter(event)"
+                        class="form-control input-sm" 
+                        placeholder="Filter..." />
+                    </div>
+                    <br/>
                     <ul id="deviceList">
 
                     </ul>
@@ -71,6 +79,42 @@
     <script src="assets/js/core.js"></script>
 
     <script>
+        function filter(e){
+            let text = $(e.target).val(),
+                filters;
+            if(text.indexOf(",") === -1){
+                filters = [text]
+            } else{
+                filters = text.split(",")
+                for(let i in filters){
+                    if(filters[i][0] == " "){
+                        filters[i] = filters[i].substring(1, filters[i].length)
+                    }
+                }
+            }
+            const index = filters.indexOf("");
+            if (index > -1) {
+                filters.splice(index, 1);
+            }
+            console.log(filters)
+            
+            for(let el of $("#deviceList li")){
+                let matches = text.length == 0 ? 1: 0;
+                for(let filter of filters){
+                    if($(el).text().toLowerCase().indexOf(filter.toLowerCase()) > -1){
+                        matches++;
+                        break;
+                    }
+                }
+
+                if(matches===0){
+                    $(el).css({display: "none"})
+                } else {
+                    $(el).css({display: "block"})
+                }
+            }
+        }
+
         $(document).ready(() => {
             fetch(`/v1/teaching/getAllDevices`, {
                 method: "GET",
