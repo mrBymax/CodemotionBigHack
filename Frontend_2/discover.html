@@ -28,14 +28,14 @@
     <div class="container">
 
         <div class="py-5 text-center">
-            <img class="d-block mx-auto mb-4" src="assets/img/logo.png" width="150" height="150">
+            <a href="index.html"><img class="d-block mx-auto mb-4" src="assets/img/logo.png" width="150" height="150" ></a>
             <h1 class="stColor">Discover</h1>
             <h4 class="titleDescription linea">Here you can analize your electronics component for discover and learn what components <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a> produce for this object.</h4>
         </div>
 
-        <div>
-            <div>
-                <h1>Does ST manufacture anything for this object (photo)?</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Does <b class="stColor">ST</b> manufacture anything for this object (photo)?</h2>
                 <div class="form-group">
                     <label for="uploadImage">Choose an image:</label>
                     <input type="file" 
@@ -47,14 +47,15 @@
             </div>
 
             <!-- QUA VA LA RISPOSTA CHE ARRIVA DAL SERVER -->
-            <div id="serverResponse">
+            <div id="serverResponse" >
 
             </div>
         </div>
 
         <!-- QUA VA IL CHATBOT -->
-        <div>
-            <h1 class="stColor">Assi<b>ST</b>ant</h1>
+        <div class="row">
+            <div class="col-md-12">
+            <h2 class="stColor">Assi<b>ST</b>ant</h2>
                          
             <div class="container content">
                 <div class="row">
@@ -66,8 +67,8 @@
                                     <li class="in">
                                         <div class="chat-body">
                                             <div class="chat-message">
-                                                <h5>Assi<b>ST</b>ant</h5>
-                                                <p>Hello I'm Assi<b>ST</b>ant, and I'm willing to help you find out our products!</p>
+                                                <h5>Assi<b class="stColor">ST</b>ant</h5>
+                                                <p>Hello I'm Assi<b class="stColor">ST</b>ant, and I'm willing to help you find out our products!</p>
                                             </div>
                                         </div>
                                     </li>
@@ -91,6 +92,7 @@
 
                 </div>
             </div>
+        </div>
         </div>
 
     </div>
@@ -152,7 +154,7 @@
             return `<li class="in">
                         <div class="chat-body">
                             <div class="chat-message">
-                                <h5>Assi<b>ST</b>ant</h5>
+                                <h5>Assi<b class="stColor">ST</b>ant</h5>
                                 <p>${text}</p>
                             </div>
                         </div>
