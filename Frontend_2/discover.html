@@ -20,6 +20,7 @@
 
     <!-- MAIN CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/chat.css" rel="stylesheet">
 
 </head>
 
@@ -34,6 +35,7 @@
 
         <div>
             <div>
+                <h1>Does ST manufacture anything for this object (photo)?</h1>
                 <div class="form-group">
                     <label for="uploadImage">Choose an image:</label>
                     <input type="file" 
@@ -53,17 +55,42 @@
         <!-- QUA VA IL CHATBOT -->
         <div>
             <h1 class="stColor">Assi<b>ST</b>ant</h1>
-            
-            <p>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                  Link with href
-                </a>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                  Button with data-target
-                </button>
-              </p>
-              
+                         
+            <div class="container content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">Chat</div>
+                            <div class="card-body height3">
+                                <ul class="chat-list" id="chatList">
+                                    <li class="in">
+                                        <div class="chat-body">
+                                            <div class="chat-message">
+                                                <h5>Assi<b>ST</b>ant</h5>
+                                                <p>Hello I'm Assi<b>ST</b>ant, and I'm willing to help you find out our products!</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="panel-footer">
+                            <div class="input-group">
+                                <input id="chatMessageText" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                <span class="input-group-btn">
+                                <button 
+                                class="btn btn-primary btn-sm" 
+                                id="btn-chat"
+                                >Send</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div id="serverResponseChat">
+
+                </div>
+            </div>
         </div>
 
     </div>
@@ -75,9 +102,8 @@
     <script src="assets/jquery-3.6.0.min.js"></script>
     <script src="assets/bootstrap/bootstrap.bundle.js"></script>
 
-
     <script>
-        function loadComponentsInside(name){
+        function loadComponentsInside(name, where){
             fetch(`http://localhost:8083/v1/classify/getInfo/${name}`, {
                             method: "GET",
                             mode: 'cors'
@@ -90,7 +116,7 @@
                                 let component = data[i];
                                 html += `
                                 <div class="card">
-    <div class="card-header" id="heading${i}">
+    <div class="card-header2" id="heading${i}">
       <h5 class="mb-0">
         <button class="btn btn-link" data-toggle="collapse" 
         data-target="#component${i}" 
@@ -109,26 +135,27 @@
   </div>
                                 `
                             }
-                            html += "</div>";
+                            html += "</div>"; 
 
-                            $("#componentList").html(html);
-                        });
+                            console.log(where+" #componentList")
+
+                            $(where+" #componentList").html(html);
+            });
         }
 
 
-        function showDataForDevice(item) {
+        function showDataForDevice(item, where) {
             let name = item.class,
-                imgUrl = item.imgEndpoint,
-                score = item.score;
+                imgUrl = item.imgEndpoint;
 
             let html =  `<h1>${name.toUpperCase()}</h1>` +
                         `<img src="${imgUrl}" alt="No block diagram available" />` +
                         `<h1>ST components inside:</h1>` +
                         `<div id="componentList">Loading...</div>`;
             
-            $("#serverResponse").html(html);
+            $(where).html(html);
 
-            loadComponentsInside(name);
+            loadComponentsInside(name, where);
         }
 
         function analyzeImage() {
@@ -157,7 +184,7 @@
                                 text += `${i}: ${name} - ${score}\n`
                             }
                             let chosen = prompt(text, "0");
-                            showDataForDevice(data[chosen]);
+                            showDataForDevice(data[chosen], "#serverResponse");
                         })
                 };
                 reader.onerror = function(error) {
@@ -171,6 +198,89 @@
 
     </script>
 
+
+<script>
+    function getMessageHtml(type, text){
+        if(type=="in"){
+            return `<li class="in">
+                        <div class="chat-body">
+                            <div class="chat-message">
+                                <h5>Assi<b>ST</b>ant</h5>
+                                <p>${text}</p>
+                            </div>
+                        </div>
+                    </li>`;
+        } else {
+            return `<li class="out">
+                        <div class="chat-body">
+                            <div class="chat-message">
+                                <p>${text}</p>
+                            </div>
+                        </div>
+                    </li>`;
+        }
+    }
+
+    function addToChat(type, text){
+        let html = $("#chatList").html();
+        html+=getMessageHtml(type, text);
+        $("#chatList").html(html);
+        isAdding = false;
+    }
+
+    function showDataForDeviceChat(name, endpoint, where){
+        showDataForDevice({
+            class: name,
+            imgEndpoint: endpoint
+        }, where);
+    }
+
+
+    function queryBot(){
+        let queryText = $("#chatMessageText").val();
+        addToChat("out", queryText);
+
+
+        fetch("http://localhost:8083/v1/classify/classifyText", {
+            method: "POST",
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: queryText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            html = "Do you mean any of these products?"
+            html += "<ul class='showPoint'>"
+            for(let i in data){
+                let component = data[i];
+                console.log(component)
+                html += `<a class='pointer' onclick="showDataForDeviceChat('${component.class}', '${component.imgEndpoint}', '#serverResponseChat')">`;
+                html += `<li>${component.class}</li>`;
+                html += "</a>";
+            }
+            html += "</ul>"
+
+            addToChat("in", html);
+        })
+    }
+
+    $(document).ready(() => {
+        $("#chatMessageText").on("keyup", (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                queryBot()
+            }
+        })
+
+        $("#btn-chat").click(() => {
+            queryBot()
+        })
+
+    })
+</script>
 
 
 
