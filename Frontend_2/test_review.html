@@ -56,7 +56,10 @@
     <script src="assets/js/core.js"></script>
 
     <script>
-        function getAccordion(data, j){
+        function getAccordion(raw_data, j){
+            let data = raw_data.data;
+            
+
             let html = `<a class="btn btn-primary" data-toggle="collapse"
                  href="#collapse${j}" role="button"
                   aria-expanded="false" 
@@ -67,6 +70,7 @@
                 html += `<div class="collapse" id="collapse${j}">
   <div class="card card-body">`     
                     html += "<ul>"
+                    html += `<li>Block diagram: ${data.block_diagram}`;
                 for(let i in data){
                     let item = data[i];
                     html += `<li>${item.component} | Given: ${item.checked}. Correct: </li>`
@@ -89,7 +93,7 @@
                 for(let j in data){
                     let object = data[j];
                     html += `<li><h5>${object.data.name} (${object.data.device}) - ${object.score}</h5>`;
-                    html += getAccordion(object.data.answers, j);
+                    html += getAccordion(object.data, j);
                     html += `</li>`;
                 }
                 $("#deviceList").html(html)

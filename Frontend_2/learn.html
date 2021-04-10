@@ -78,7 +78,9 @@
                 TO_SUBMIT = {
                     device: DEVICE,
                     answers: answers,
-                    block_diagram: blockDiagram,
+                    block_diagram: {
+                        url: blockDiagram
+                    },
                     name: $("#inputName").val()
                 }
 
