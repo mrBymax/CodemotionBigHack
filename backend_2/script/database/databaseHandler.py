@@ -16,16 +16,17 @@ return:
 """
 
 import pandas as pd
+import random
+
+data = pd.read_csv('/script/database/Sheet0-Table1.csv',
+                   error_bad_lines=False, sep=';', header=0)
+
+df = pd.DataFrame(data, columns=[
+    'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
 
 
 def get_component(name):
-    data = pd.read_csv('Sheet0-Table1.csv',
-                       error_bad_lines=False, sep=';', header=0)
-
-    df = pd.DataFrame(data, columns=[
-        'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
-
-    df.set_index('LEVEL_NO')
+    global df
 
     df = df.loc[(df['LEVEL_NO'] == 4)]
 
@@ -34,7 +35,7 @@ def get_component(name):
     ret = []
 
     for item in new_list:
-        if name in item[0].lower():
+        if name.lower() in item[0].lower():
             ret.append({
                 "name": item[2],
                 "description": item[3]
@@ -44,11 +45,7 @@ def get_component(name):
 
 
 def get_all_devices():
-    data = pd.read_csv('Sheet0-Table1.csv',
-                       error_bad_lines=False, sep=';', header=0)
-
-    df = pd.DataFrame(data, columns=[
-        'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
+    global df
 
     df.set_index('LEVEL_NO')
 
@@ -59,9 +56,25 @@ def get_all_devices():
     ret = []
 
     for item in new_list:
-        ret.append({
-            "name": item[2],
-            "description": item[3]
-        })
+        if item[0] not in ret:
+            ret.append(item[0])
 
+    return ret
+
+
+def get_random_components(num, present):
+    new_list = df.values.tolist()
+    random.shuffle(new_list)
+    ret = []
+    i = 0
+    for item in new_list:
+        if i > num:
+            break
+        to_append = {
+                "name": item[2],
+                "description": item[3]
+            }
+        if to_append not in present:
+            ret.append(to_append)
+            i += 1
     return ret

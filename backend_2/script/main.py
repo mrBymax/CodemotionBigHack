@@ -1,3 +1,4 @@
+import random
 
 from flask import Flask, request, send_from_directory, Response
 from flask_cors import CORS, cross_origin
@@ -8,12 +9,13 @@ import json
 
 from utils import image
 from database import databaseHandler
-#import matplotlib
-#import matplotlib.pyplot as plt
+# import matplotlib
+# import matplotlib.pyplot as plt
 
-#matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import time
 from neuralNet import predict as nnPredict
+from database import databaseHandler
 
 app = Flask(__name__, static_url_path='')
 CORS(app)
@@ -26,8 +28,8 @@ devices = [
     {"class": "notebook",
      "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group1/72/cd/d6/b5/9a/a8/4e/63/computers_peripherals_laptop_image/files/computers_peripherals_laptop.jpg/_jcr_content/translations/en.computers_peripherals_laptop.jpg"},
     {
-    "class": "desktop_computer",
-    "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group1/8b/3c/e1/eb/05/9d/4f/90/computers_peripherals_desktop_image/files/computers_peripherals_desktop.jpg/_jcr_content/translations/en.computers_peripherals_desktop.jpg"
+        "class": "desktop_computer",
+        "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group1/8b/3c/e1/eb/05/9d/4f/90/computers_peripherals_desktop_image/files/computers_peripherals_desktop.jpg/_jcr_content/translations/en.computers_peripherals_desktop.jpg"
     }
 ]
 
@@ -78,31 +80,10 @@ def retFile():
     return resp
 
 
-@app.route("/v1/classify/getInfo/<path:path>", methods=['GET'])
-def getInfo(path):
-    print(path)
-    ret = [
-        {
-            "componentName": "BALF-NRG-02D3",
-            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-        },
-        {
-            "componentName": "BALF-d-02D3",
-            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-        },
-        {
-            "componentName": "BALF-NRG-444",
-            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-        },
-        {
-            "componentName": "BALF-5523456-02D3",
-            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-        },
-        {
-            "componentName": "BALF-234567-02D3",
-            "description": "Programmable Bluetooth&reg; LE 5.2 Wireless SoC"
-        }
-    ]
+@app.route("/v1/classify/getInfo/<device>", methods=['GET'])
+def getInfo(device):
+    ret = databaseHandler.get_component(device)
+
     resp = Response(response=json.dumps(ret),
                     status=200,
                     mimetype="application/json")
@@ -112,7 +93,7 @@ def getInfo(path):
 @app.route("/v1/teaching/getAllDevices", methods=['GET'])
 def getAllDevices():
     # funzione Federico
-    ret = get_all_devices()
+    ret = databaseHandler.get_all_devices()
     # ret = [
     #     {
     #         "name": "test"
@@ -125,18 +106,26 @@ def getAllDevices():
     return resp
 
 
-@app.route("/v1/teaching/setDevice/<path:path>", methods=['GET'])
-def setComponent(path):
-    # path: nome del componente con maiuscole/minuscole tutte uguali ad xls
-    # shuffle list python
+TEST_OPTIONS = []
+CORRECT = []
+WRONG = []
 
-    ret = get_component(path)
-    # ret = [
-    #     {
-    #         "name": "diocane"
-    #     },
-    # ]
 
+@app.route("/v1/teaching/setDevice/<device>", methods=['GET'])
+def setComponent(device):
+    global TEST_OPTIONS, CORRECT, WRONG
+    CORRECT = databaseHandler.get_component(device)
+    WRONG = databaseHandler.get_random_components(len(CORRECT), CORRECT)
+
+    TEST_OPTIONS = CORRECT + WRONG
+    random.shuffle(TEST_OPTIONS)
+
+    ret = {
+        "detail": "Device set",
+        "correct": CORRECT,
+        "wrong": WRONG,
+        "test": TEST_OPTIONS
+    }
     resp = Response(response=json.dumps(ret),
                     status=200,
                     mimetype="application/json")
@@ -145,13 +134,7 @@ def setComponent(path):
 
 @app.route("/v1/teaching/getTest", methods=['GET'])
 def getTest(path):
-    # funzione Federico
-    
-    ret = {
-        "detail": "tutte le componenti shuffled"
-    }
-
-    resp = Response(response=json.dumps(ret),
+    resp = Response(response=json.dumps(TEST_OPTIONS),
                     status=200,
                     mimetype="application/json")
     return resp
