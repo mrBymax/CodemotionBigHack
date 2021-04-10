@@ -32,7 +32,25 @@
             <h4>Here you can learn to remember what components <a href="https://www.st.com/content/st_com/en.html" target="_blank" class="stColor">STMicroelectronics</a> use in the objects</h4>
         </div>
 
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <h1>Select the device:</h1>
+                    <ul id="deviceList">
 
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h1>ST components inside</h1>
+                <div id="serverResponse">
+                    <div id="componentList"></div>
+                </div> 
+            </div>
+
+        </div>
     </div>
 
     <footer class="container text-center">
@@ -41,8 +59,45 @@
 
     <script src="assets/jquery-3.6.0.min.js"></script>
     <script src="assets/bootstrap/bootstrap.bundle.js"></script>
+    <script src="assets/js/core.js"></script>
 
+    <script>
+        $(document).ready(() => {
+            fetch(`http://localhost:8083/v1/teaching/getAllDevices`, {
+                method: "GET",
+                mode: 'cors'
+            })
+            .then(response => response.json())
+            .then(data => {
+                html = "";
+                for(let object of data){
+                    html += `<li class="pointer" onclick="selectDevice(event)">${object}</li>`;
+                }
+                $("#deviceList").html(html)
+            });
+        })
 
+        function submitComponent(name){
+            fetch(`http://localhost:8083/v1/teaching/setDevice/${name}`, {
+                method: "GET",
+                mode: 'cors'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.detail);
+                console.log(data);
+            })
+        }
+
+        function selectDevice(e){
+            let deviceName = $(e.srcElement).text();
+            let html = `<div id="componentList"></div>`;
+            html = `<button type="button" class="btn btn-success" onclick="submitComponent('${deviceName}')">Submit this comopnent</button>`+
+                html;
+            $("#serverResponse").html(html);
+            loadComponentsInside(deviceName, "#serverResponse")
+        }
+    </script>
 </body>
 
 </html>

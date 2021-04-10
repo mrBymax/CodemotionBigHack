@@ -106,9 +106,6 @@ body{
     margin-top:40px;    
 }
 
-.pointer {
-    cursor: pointer;
-}
 .showPoint {
     list-style-type: disc;
     color:#ffffff;
