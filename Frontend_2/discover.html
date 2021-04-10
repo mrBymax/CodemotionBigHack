@@ -36,10 +36,12 @@
             <div>
                 <div class="form-group">
                     <label for="uploadImage">Choose an image:</label>
-                    <input type="file" class="form-control-file" id="uploadImage" name="uploadImage" accept="image/png, image/jpeg">
+                    <input type="file" 
+                    class="form-control-file" 
+                    id="uploadImage" accept="image/png, image/jpeg">
                 </div>
 
-                <button onclick="analizzaImmagine();" class="btn btn-primary mb-2 customButton">START THE ANALYSIS</button>
+                <button onclick="analyzeImage();" class="btn btn-primary mb-2 customButton">START THE ANALYSIS</button>
             </div>
 
             <!-- QUA VA LA RISPOSTA CHE ARRIVA DAL SERVER -->
@@ -50,8 +52,17 @@
 
         <!-- QUA VA IL CHATBOT -->
         <div>
-            <h1 class="stColor">as SiT ant</h1>
-
+            <h1 class="stColor">Assi<b>ST</b>ant</h1>
+            
+            <p>
+                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  Link with href
+                </a>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  Button with data-target
+                </button>
+              </p>
+              
 
         </div>
 
@@ -66,13 +77,61 @@
 
 
     <script>
+        function loadComponentsInside(name){
+            fetch(`http://localhost:8083/v1/classify/getInfo/${name}`, {
+                            method: "GET",
+                            mode: 'cors'
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            let html = `<div id="accordion">`;
+                            
+                            for(let i in data){
+                                let component = data[i];
+                                html += `
+                                <div class="card">
+    <div class="card-header" id="heading${i}">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" 
+        data-target="#component${i}" 
+        aria-expanded="true" 
+        aria-controls="collapseOne">
+        ${component.name}
+        </button>
+      </h5>
+    </div>
+
+    <div id="component${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
+      <div class="card-body">
+        ${component.description}
+        </div>
+    </div>
+  </div>
+                                `
+                            }
+                            html += "</div>";
+
+                            $("#componentList").html(html);
+                        });
+        }
+
+
         function showDataForDevice(item) {
             let name = item.class,
                 imgUrl = item.imgEndpoint,
                 score = item.score;
+
+            let html =  `<h1>${name.toUpperCase()}</h1>` +
+                        `<img src="${imgUrl}" alt="No block diagram available" />` +
+                        `<h1>ST components inside:</h1>` +
+                        `<div id="componentList">Loading...</div>`;
+            
+            $("#serverResponse").html(html);
+
+            loadComponentsInside(name);
         }
 
-        function analizzaImmagine() {
+        function analyzeImage() {
             function getBase64(file) {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -89,7 +148,7 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            let text = "Seleziona:\n";
+                            let text = "Select:\n";
                             for (let i in data) {
                                 let item = data[i],
                                     name = item.class,
