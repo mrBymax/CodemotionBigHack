@@ -30,6 +30,10 @@ devices = [
     {
         "class": "desktop_computer",
         "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/end_app_block_diagram/group1/8b/3c/e1/eb/05/9d/4f/90/computers_peripherals_desktop_image/files/computers_peripherals_desktop.jpg/_jcr_content/translations/en.computers_peripherals_desktop.jpg"
+    },
+    {
+        "class": "ABS",
+        "imgEndpoint": "https://www.st.com/content/ccc/fragment/application_related/end_app_information/block_diagram/abs/files/abs.svg"
     }
 ]
 
@@ -92,13 +96,7 @@ def getInfo(device):
 
 @app.route("/v1/teaching/getAllDevices", methods=['GET'])
 def getAllDevices():
-    # funzione Federico
     ret = databaseHandler.get_all_devices()
-    # ret = [
-    #     {
-    #         "name": "test"
-    #     },
-    # ]
 
     resp = Response(response=json.dumps(ret),
                     status=200,
@@ -121,17 +119,54 @@ WRONG = {
 }
 
 
-@app.route("/v1/teaching/setDevice/<device>", methods=['GET'])
-def setComponent(device):
+@app.route("/v1/teaching/setDevice/<deviceName>", methods=['GET'])
+def setComponent(deviceName):
     global TEST_OPTIONS, CORRECT, WRONG
-    CORRECT["components"] = databaseHandler.get_component(device)
+    TEST_OPTIONS = {
+        "device": "",
+        "components": [],
+        "block_diagram": []
+    }
+    CORRECT = {
+        "components": [],
+        "block_diagram": []
+    }
+    WRONG = {
+        "components": [],
+        "block_diagram": []
+    }
+
+    CORRECT["components"] = databaseHandler.get_component(deviceName)
     WRONG["components"] = databaseHandler.get_random_components(len(CORRECT["components"]), CORRECT["components"])
 
     TEST_OPTIONS["components"] = CORRECT["components"] + WRONG["components"]
     random.shuffle(TEST_OPTIONS["components"])
-    TEST_OPTIONS["device"] = device
+    TEST_OPTIONS["device"] = deviceName
 
+    correct_url = ""
     # Todo: add block_diagram
+    for device in devices:
+        if device["class"].lower() in deviceName.lower():
+            correct_url = device["imgEndpoint"]
+            break
+
+    CORRECT["block_diagram"].append(correct_url)
+
+    devices2 = devices
+    random.shuffle(devices2)
+    i = 0
+    for item in devices2:
+        if i == 3:
+            break
+        if item["imgEndpoint"] != correct_url:
+            WRONG["block_diagram"].append(item["imgEndpoint"])
+            i += 1
+
+    print(CORRECT["block_diagram"])
+    print(WRONG["block_diagram"])
+
+    TEST_OPTIONS["block_diagram"] = CORRECT["block_diagram"] + WRONG["block_diagram"]
+    random.shuffle(TEST_OPTIONS["block_diagram"])
 
     ret = {
         "detail": "Device set",
@@ -169,12 +204,30 @@ def submitTest():
     global TESTS
     test_data = request.json
 
-    test_data["score"] = 0.9  # TODO: fix score
+    correct = 0
+    wrong = 0
+
+    for answer in test_data["data"]["answers"]:
+        answer["expected"] = False
+        for correct_component in CORRECT["components"]:
+            if answer["component"] == correct_component["name"]:
+                answer["expected"] = True
+                break
+        if answer["expected"] == answer["checked"]:
+            correct += 1
+        else:
+            wrong += 1
+
+    test_data["score"] = {
+        "correct": correct,
+        "wrong": wrong
+    }
 
     TESTS.append(test_data)
 
     ret = {
-        "detail": "okay"
+        "detail": "okay",
+        "data": test_data
     }
 
     resp = Response(response=json.dumps(ret),
