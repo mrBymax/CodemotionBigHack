@@ -75,7 +75,7 @@ def retFile():
 
     ret = []
     for device in devices:
-        if device["class"] in query:
+        if device["class"].lower() in query.lower():
             ret.append(device)
 
     resp = Response(response=json.dumps(ret),
@@ -217,6 +217,10 @@ def submitTest():
             correct += 1
         else:
             wrong += 1
+
+    test_data["data"]["block_diagram"]["correct"] = False
+    if test_data["data"]["block_diagram"]["url"] in CORRECT["block_diagram"]:
+        test_data["data"]["block_diagram"]["correct"] = True
 
     test_data["score"] = {
         "correct": correct,
