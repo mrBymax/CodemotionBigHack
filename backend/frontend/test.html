@@ -173,6 +173,14 @@
                     html += "</div>"
 
                     $("#testInfo").html(html);
+
+                    document.addEventListener("visibilitychange", () => {
+                        if(alerted) return;
+                        alerted = true;
+                        $(".mainContainer").html("<h1>TEST NOT VALID BECAUSE YOU CHANGED THE WINDOW</h1>");
+                        $("*").css({background: "#c62828", textAlign: "center", color: "#FFF", lineHeight: "100vh"})
+                        alert("Test is no longer available because you have cheated!");
+                    });
                 } else {
                     $("#testInfo").text("No test available right now")
                 }
@@ -180,13 +188,6 @@
         })
 
         var alerted = false;
-        document.addEventListener("visibilitychange", () => {
-            if(alerted) return;
-            alerted = true;
-            $(".mainContainer").html("<h1>TEST NOT VALID BECAUSE YOU CHANDED THE WINDOW</h1>");
-            $("*").css({background: "#c62828", textAlign: "center", color: "#FFF", lineHeight: "100vh"})
-            alert("Test is no longer available because you have cheated!");
-        });
     </script>
 
 
