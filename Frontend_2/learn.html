@@ -60,19 +60,25 @@
                         component: "",
                         checked: false
                     }
-                    if($(el).find("input:checked").length > 0){
-                        to_add.checked = true;
-                    } else {
-                        to_add.checked = false;
+                    if($(el).find("input.checkbox").length > 0){
+                        if($(el).find("input.checkbox:checked").length > 0){
+                            to_add.checked = true;
+                        } else {
+                            to_add.checked = false;
+                        }
+
+                        to_add.component = $(el).find("label").text().split(" (")[0];
+
+                        answers.push(to_add);
                     }
-
-                    to_add.component = $(el).find("label").text().split(" (")[0];
-
-                    answers.push(to_add);
                 }
+
+                let blockDiagram = $(".form-check-input:checked").parent().find("img").attr("src");
+
                 TO_SUBMIT = {
                     device: DEVICE,
                     answers: answers,
+                    block_diagram: blockDiagram,
                     name: $("#inputName").val()
                 }
 
@@ -110,11 +116,21 @@
                         <h2>Which are the ST components on a "${data.device}"?</h2>
                     `;
 
+                    // TODO: add form for block diagrams
+                    for(let i in data.block_diagram){
+                        let component = data.block_diagram[i];
+                        html += `<div class="form-check">
+                        <input class="form-check-input" type="radio" ${i == 0? "checked" : ""} name="flexRadioDefault" id="flexRadioDefault${i}">
+                        <label class="form-check-label" for="flexRadioDefault${i}">
+                            <img src="${component}" width="200px"/>
+                        </label>
+                        </div>`
+                    }
                     
                     for(let i in data.components){
                         let component = data.components[i];
                         html += `<div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check${i}">
+                                    <input class="form-check-input checkbox" type="checkbox" value="" id="check${i}">
                                     <label class="form-check-label" for="check${i}">${component.name} (${component.description})</label>
                                 </div>`
                     }
