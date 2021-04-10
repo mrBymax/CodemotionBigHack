@@ -50,13 +50,51 @@
     <script src="assets/bootstrap/bootstrap.bundle.js"></script>
 
     <script>
+        var DEVICE;
+        var TO_SUBMIT;
         function submitTest(e){
             let answers = [];
             $(document).ready(() => {
-                $(document).find(".form-check").each(() => {
-                    console.log(this)
+                for(let el of $(".form-check")){
+                    to_add = {
+                        component: "",
+                        checked: false
+                    }
+                    if($(el).find("input:checked").length > 0){
+                        to_add.checked = true;
+                    } else {
+                        to_add.checked = false;
+                    }
+
+                    to_add.component = $(el).find("label").text().split(" (")[0];
+
+                    answers.push(to_add);
+                }
+                TO_SUBMIT = {
+                    device: DEVICE,
+                    answers: answers,
+                    name: $("#inputName").val()
+                }
+
+                submitRequest(TO_SUBMIT)
+            })
+        }
+
+        function submitRequest(data){
+            fetch("http://localhost:8083/v1/teaching/submitTest", {
+                method: "POST",
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data
                 })
             })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.detail)
+            });
         }
 
         $(document).ready(() => {
@@ -67,6 +105,7 @@
             .then(response => response.json())
             .then(data => {
                 if(data.components.length > 0){
+                    DEVICE = data.device;
                     let html = `<div>
                         <h2>Which are the ST components on a "${data.device}"?</h2>
                     `;
@@ -76,12 +115,16 @@
                         let component = data.components[i];
                         html += `<div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="check${i}">
-                                    <label class="form-check-label" for="check${i}">
-                                        ${component.name} (${component.description})
-                                    </label>
+                                    <label class="form-check-label" for="check${i}">${component.name} (${component.description})</label>
                                 </div>`
                     }
                     
+                    html += `<div class="form-group">
+    <label for="exampleInputEmail1">Your name</label>
+    <input type="text" class="form-control" id="inputName" aria-describedby="emailHelp" placeholder="Enter name">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your name with anyone else.</small>
+  </div>`
+
                     html += `<button type="button" class="btn btn-success" onclick="submitTest(event)">Submit this test</button>`;
 
                     html += "</div>"

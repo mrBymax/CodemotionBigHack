@@ -127,7 +127,7 @@ def setComponent(device):
     CORRECT["components"] = databaseHandler.get_component(device)
     WRONG["components"] = databaseHandler.get_random_components(len(CORRECT["components"]), CORRECT["components"])
 
-    TEST_OPTIONS["components"] = CORRECT + WRONG
+    TEST_OPTIONS["components"] = CORRECT["components"] + WRONG["components"]
     random.shuffle(TEST_OPTIONS["components"])
     TEST_OPTIONS["device"] = device
 
@@ -152,9 +152,32 @@ def getTest():
                     mimetype="application/json")
     return resp
 
-@app.route("/v1/teaching/getBlockDiagram", methods=['GET'])
-def getTest():
-    resp = Response(response=json.dumps(TEST_OPTIONS),
+
+TESTS = []
+
+
+@app.route("/v1/teaching/getSubmittedTests", methods=['GET'])
+def getSubmittedTests():
+    resp = Response(response=json.dumps(TESTS),
+                    status=200,
+                    mimetype="application/json")
+    return resp
+
+
+@app.route("/v1/teaching/submitTest", methods=['POST'])
+def submitTest():
+    global TESTS
+    test_data = request.json
+
+    test_data["score"] = 0.9  # TODO: fix score
+
+    TESTS.append(test_data)
+
+    ret = {
+        "detail": "okay"
+    }
+
+    resp = Response(response=json.dumps(ret),
                     status=200,
                     mimetype="application/json")
     return resp
@@ -162,7 +185,10 @@ def getTest():
 
 @app.route('/')
 def root():
-    return app.send_static_file('index.html')
+    resp = Response(response=json.dumps([]),
+                    status=200,
+                    mimetype="application/json")
+    return resp
 
 
 if __name__ == '__main__':
