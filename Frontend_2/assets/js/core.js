@@ -5,16 +5,17 @@ function loadComponentsInside(name, where){
                 })
                 .then(response => response.json())
                 .then(data => {
+                    let where2 = where.split("#")[1];
                     let html = `<div id="accordion">`;
                     
                     for(let i in data){
                         let component = data[i];
                         html += `
                         <div class="card">
-<div class="card-header2" id="heading${i}">
+<div class="card-header2" id="heading${where2}${i}">
 <h5 class="mb-0">
 <button class="btn btn-link" data-toggle="collapse" 
-data-target="#component${i}" 
+data-target="#component${where2}${i}" 
 aria-expanded="true" 
 aria-controls="collapseOne">
 ${component.name}
@@ -22,7 +23,7 @@ ${component.name}
 </h5>
 </div>
 
-<div id="component${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
+<div id="component${where2}${i}" class="collapse" aria-labelledby="heading${where2}${i}" data-parent="#accordion">
 <div class="card-body">
 ${component.description}
 </div>
