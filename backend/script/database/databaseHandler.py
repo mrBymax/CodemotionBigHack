@@ -22,13 +22,13 @@ data = pd.read_csv('/script/database/Sheet0-Table1.csv',
                    error_bad_lines=False, sep=';', header=0)
 
 df = pd.DataFrame(data, columns=[
-    'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION'])
+    'CATEGORY_NAME', 'LEVEL_NO', 'PART_NUMBER', 'GENERAL_DESCRIPTION', 'PUBLISHED'])
 
 
 def get_component(name):
     global df
 
-    df = df.loc[(df['LEVEL_NO'] == 4)]
+    df = df.loc[(df['LEVEL_NO'] == 4) & (df['PUBLISHED'] == "Y")]
 
     new_list = df.values.tolist()
 
@@ -49,7 +49,7 @@ def get_all_devices():
 
     df.set_index('LEVEL_NO')
 
-    df = df.loc[(df['LEVEL_NO'] == 4)]
+    df = df.loc[(df['LEVEL_NO'] == 4) & (df['PUBLISHED'] == "Y")]
 
     new_list = df.values.tolist()
 
